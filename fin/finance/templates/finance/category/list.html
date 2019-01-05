@@ -1,0 +1,51 @@
+{% extends 'finance/base.html' %}
+
+{% block title %}List of categories{% endblock %}
+
+{% block navbar %}
+    {% include "finance/navbar.html" with active_nav='Categories' %}
+{% endblock %}
+
+{% block content %}
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+              <div class="alert alert-primary" role="alert">
+
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+
+
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Control</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for category in categories %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ category.name }}</td>
+              <td>{{ category.description }}</td>
+              <td>
+                <a class="btn btn-primary" href="{% url 'finance:category_update' category.pk %}" role="button"><span class="fas fa-pen"></span> </a>
+                <a class="btn btn-primary" href="{% url 'finance:category_delete' category.pk %}" role="button"><span class="fas fa-trash-alt"></span></a>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <div>
+          <a class="btn btn-primary float-left" href="{% url 'finance:category_create' %}" role="button">Create category</a>
+        </div>
+{% endblock %}

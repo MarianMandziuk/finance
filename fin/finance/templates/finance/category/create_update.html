@@ -1,0 +1,35 @@
+{% extends 'finance/base.html' %}
+
+
+{% block title %}Create category{% endblock %}
+
+{% block navbar %}
+    {% include "finance/navbar.html" with active_nav='Categories' %}
+{% endblock %}
+
+{% block content %}
+
+<form action="." method="post">
+    {% csrf_token %}
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label">Name</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" id="name" value="{% if category %}{{ category.name }}{% endif %}" name="name">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="description" class="col-sm-2 col-form-label">Description</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" id="description" value="{% if category %}{{ category.description }}{% endif %}" name="description">
+    </div>
+  </div>
+  <div class="form-group row">
+      <div class="col-sm-6">
+        <button type="submit" class="btn btn-primary">{% if update %}Update{% else %}Create{% endif %}</button>
+      </div>
+      <div class="col-sm-1">
+        <button type="reset" class="btn btn-primary">Reset</button>
+      </div>
+  </div>
+</form>
+{% endblock %}
