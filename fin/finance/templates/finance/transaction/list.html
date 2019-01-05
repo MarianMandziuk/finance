@@ -1,0 +1,55 @@
+{% extends 'finance/base.html' %}
+
+{% block title %}List of categories{% endblock %}
+
+{% block navbar %}
+    {% include "finance/navbar.html" with active_nav='Transactions' %}
+{% endblock %}
+
+{% block content %}
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+              <div class="alert alert-primary" role="alert">
+
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Category</th>
+              <th scope="col">Type operation</th>
+              <th scope="col">Total</th>
+              <th scope="col">Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">Control</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for transaction in transactions %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ transaction.category }}</td>
+              <td>{{ transaction.type_operation }}</td>
+              <td>{{ transaction.total }}</td>
+              <td>{{ transaction.date }}</td>
+              <td>{{ transaction.description }}</td>
+              <td>
+                <a class="btn btn-primary" href="{% url 'finance:transaction_update' transaction.pk %}" role="button"><span class="fas fa-pen"></span> </a>
+                <a class="btn btn-primary" href="{% url 'finance:transaction_delete' transaction.pk %}" role="button"><span class="fas fa-trash-alt"></span></a>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <div>
+          <a class="btn btn-primary float-left" href="{% url 'finance:transaction_create' %}" role="button">Create category</a>
+        </div>
+{% endblock %}

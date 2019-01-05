@@ -1,12 +1,12 @@
 <ul class="navbar-nav mr-auto">
   <li class="nav-item {% if active_nav == 'Home' %} active{% endif %}">
-    <a class="nav-link" href="">Home <span class="sr-only">(current)</span></a>
+    <a class="nav-link" href="{% url 'finance:home' %}">Home <span class="sr-only">(current)</span></a>
   </li>
   <li class="nav-item {% if active_nav == 'Categories' %} active{% endif %}">
     <a class="nav-link" href="{% url 'finance:category_list' %}">Categories</a>
   </li>
   <li class="nav-item {% if active_nav == 'Transactions' %} active{% endif %}">
-    <a class="nav-link" href="">Transactions</a>
+    <a class="nav-link" href="{% url 'finance:transaction_list' %}">Transactions</a>
   </li>
   <li class="nav-item {% if active_nav == 'Report' %} active{% endif %}">
     <a class="nav-link" href="">Report</a>
