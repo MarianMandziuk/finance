@@ -9,6 +9,6 @@
     <a class="nav-link" href="{% url 'finance:transaction_list' %}">Transactions</a>
   </li>
   <li class="nav-item {% if active_nav == 'Report' %} active{% endif %}">
-    <a class="nav-link" href="">Report</a>
+    <a class="nav-link" href="{% url 'finance:report' %}">Report</a>
   </li>
 </ul>

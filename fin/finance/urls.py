@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import category_views, home_views, transaction_views
+from .views import category_views, home_views, transaction_views, report_views
 
 
 app_name = 'finance'
@@ -22,4 +22,6 @@ urlpatterns = [
     path('transaction/<int:pk>/delete/', transaction_views.transaction_delete, name='transaction_delete'),
     path('transaction/<int:pk>/update/', transaction_views.transaction_update, name='transaction_update'),
 
+    # reports
+    path('report/', report_views.report, name='report'),
 ]

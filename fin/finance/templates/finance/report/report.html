@@ -1,0 +1,41 @@
+{% extends 'finance/base.html' %}
+
+
+{% block title %}Report generation{% endblock %}
+
+{% block navbar %}
+    {% include "finance/navbar.html" with active_nav='Report' %}
+{% endblock %}
+
+{% block content %}
+
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{{ form.media }}
+<div class="row">
+    <div class="col-8">
+<form action="." method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-primary" name="pie" value="pie">Pie</button>
+        </div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-primary" name="line" value="line">Line</button>
+        </div>
+        <div class="col-sm-2">
+            <button type="reset" class="btn btn-primary">Reset</button>
+        </div>
+    </div>
+
+
+
+</form>
+        </div>
+</div>
+{% endblock %}

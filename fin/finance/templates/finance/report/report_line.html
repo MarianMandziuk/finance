@@ -1,0 +1,67 @@
+{% extends 'finance/base.html' %}
+
+
+{% block title %}Report generation{% endblock %}
+
+{% block navbar %}
+    {% include "finance/navbar.html" with active_nav='Report' %}
+{% endblock %}
+
+{% block content %}
+
+<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+
+<script>
+
+Highcharts.chart('container', {
+
+    title: {
+        text: 'Day-by-Day Report of expenses/revenues  {{ start_date }} - {{ end_date }}'
+    },
+
+    xAxis: {
+        type: 'datetime'
+    },
+
+    yAxis: {
+        title: {
+            text: 'Values'
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+
+    plotOptions: {
+        series: {
+            label: {
+                connectorAllowed: false
+            },
+            pointStart: Date.UTC({{ start_date_format|safe }}),
+            pointInterval: 24 * 3600 * 1000
+        }
+    },
+
+    series: [{{ data|safe }}],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
+});
+</script>
+{% endblock %}
