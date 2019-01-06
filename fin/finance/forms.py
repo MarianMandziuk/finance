@@ -1,6 +1,7 @@
 from django import forms
 from .models import Transaction
 from bootstrap_datepicker_plus import DatePickerInput
+from django.contrib.auth.models import User
 
 
 class TransactionForm(forms.ModelForm):
@@ -24,3 +25,20 @@ class ReportForm(forms.Form):
             raise forms.ValidationError("End date must be greater when end date!")
 
         return end_date
+
+
+class UserRegistrationForm(forms.ModelForm):
+    password1 = forms.CharField(label='password',
+                                widget=forms.PasswordInput)
+    password2 = forms.CharField(label='repeat password',
+                                widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ('username',)
+
+    def clean_password2(self):
+        cd = self.cleaned_data
+        if cd['password1'] != cd['password2']:
+            raise forms.ValidationError('Passwords don\'t match.')
+        return cd['password2']

@@ -11,4 +11,9 @@
   <li class="nav-item {% if active_nav == 'Report' %} active{% endif %}">
     <a class="nav-link" href="{% url 'finance:report' %}">Report</a>
   </li>
+  {% if user.is_authenticated %}
+  <li class="nav-item {% if active_nav == 'Logout' %} active{% endif %}">
+    <a class="nav-link" href="{% url 'finance:logout' %}">Logout: {{ user.username }}</a>
+  </li>
+  {% endif %}
 </ul>

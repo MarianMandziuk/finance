@@ -1,0 +1,31 @@
+{% extends 'finance/base.html' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block navbar %}
+    {% include "finance/navbar.html" with active_nav='Home' %}
+{% endblock %}
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{{ form.media }}
+
+{% block content %}
+    <h2 class="lead">Registration form:</h2>
+    <div class="row">
+        <div class="col-8">
+        <form action="." method="post">
+            {% bootstrap_form form layout='horizontal' %}
+            {% csrf_token %}
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary">Create account</button>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+
+{% endblock %}

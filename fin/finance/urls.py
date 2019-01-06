@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import category_views, home_views, transaction_views, report_views
+from django.contrib.auth import views as auth_views
 
 
 app_name = 'finance'
@@ -24,4 +25,9 @@ urlpatterns = [
 
     # reports
     path('report/', report_views.report, name='report'),
+
+    # account
+    path('login/', auth_views.LoginView.as_view(template_name='finance/account/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='finance/account/logout.html'), name='logout'),
+    path('register/', home_views.register, name='register'),
 ]

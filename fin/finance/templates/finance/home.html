@@ -10,6 +10,12 @@
 
 {% block content %}
 
-    <h2 class="lead">Greeting on Home page</h2>
-
+    {% if user.is_authenticated %}
+    <h2 class="lead">Greeting {{ user.username }} on Home page </h2>
+    {% else %}
+    <h2 class="lead">Greeting stranger on Home page </h2>
+    <p class="lead">Choose one of the following option:</p>
+    <p><a href="{% url 'finance:login' %}">Log In</a></p>
+    <p><a href="{% url 'finance:register' %}">Sign Up</a></p>
+    {% endif %}
 {% endblock %}

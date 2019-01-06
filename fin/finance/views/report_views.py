@@ -2,11 +2,14 @@ from django.shortcuts import render
 from ..forms import ReportForm
 from ..models import Transaction, Category
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
+
 
 import json
 import datetime
 
 
+@login_required
 def report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST)

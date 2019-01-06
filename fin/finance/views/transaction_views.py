@@ -3,6 +3,8 @@ from ..models import Transaction, Category
 from django.views.generic import ListView
 from django.contrib import messages
 from ..forms import TransactionForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 TRANSACTION_SHOW = 10
@@ -13,7 +15,12 @@ class TransactionList(ListView):
     queryset = Transaction.objects.all()[:10]
     context_object_name = 'transactions'
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(TransactionList, self).dispatch(request, *args, **kwargs)
 
+
+@login_required
 def transaction_create(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
@@ -31,6 +38,7 @@ def transaction_create(request):
                                                                       'choices': Transaction.CHOICES})
 
 
+@login_required
 def transaction_delete(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
     transaction.delete()
@@ -39,6 +47,7 @@ def transaction_delete(request, pk):
     return redirect("finance:transaction_list")
 
 
+@login_required
 def transaction_update(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
     if request.method == 'POST':

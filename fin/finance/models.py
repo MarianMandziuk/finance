@@ -6,6 +6,7 @@ class Category(models.Model):
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, default=None, null=True)
 
     class Meta:
         verbose_name_plural = "categories"
@@ -26,3 +27,4 @@ class Transaction(models.Model):
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, default=None, null=True)

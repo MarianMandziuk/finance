@@ -3,7 +3,8 @@ from ..models import Category
 from django.views.generic import ListView
 from django.http import Http404
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 CATEGORIES_SHOW = 10
 
@@ -13,6 +14,10 @@ class CategoryList(ListView):
     context_object_name = 'categories'
     queryset = Category.objects.order_by('-created')[:CATEGORIES_SHOW]
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(CategoryList, self).dispatch(request, *args, **kwargs)
+
 
 # def category_list(request):
 #     categories = Category.objects.all()
@@ -20,7 +25,7 @@ class CategoryList(ListView):
 #                'message': None}
 #     return render(request, 'finance/category/list.html', context)
 
-
+@login_required
 def category_create(request):
     if request.method == 'POST':
         try:
@@ -36,6 +41,7 @@ def category_create(request):
     return render(request, 'finance/category/create_update.html')
 
 
+@login_required
 def category_delete(request, pk):
     category = get_object_or_404(Category, pk=pk)
     category.delete()
@@ -44,6 +50,7 @@ def category_delete(request, pk):
     return redirect("finance:category_list")
 
 
+@login_required
 def category_update(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':

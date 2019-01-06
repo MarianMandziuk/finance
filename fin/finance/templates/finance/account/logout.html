@@ -1,0 +1,20 @@
+{% extends 'finance/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block navbar %}
+    {% include "finance/navbar.html" with active_nav='Logout' %}
+{% endblock %}
+
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{{ form.media }}
+
+{% block content %}
+
+    <p class="lead">You have been successfully logged out.</p>
+
+{% endblock %}
