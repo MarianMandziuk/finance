@@ -12,8 +12,10 @@ TRANSACTION_SHOW = 10
 
 class TransactionList(ListView):
     template_name = 'finance/transaction/list.html'
-    queryset = Transaction.objects.all()[:10]
     context_object_name = 'transactions'
+
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user)[:TRANSACTION_SHOW]
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -23,24 +25,23 @@ class TransactionList(ListView):
 @login_required
 def transaction_create(request):
     if request.method == 'POST':
-        form = TransactionForm(request.POST)
+        form = TransactionForm(request.POST, user=request.user)
         if form.is_valid():
             transaction = form.save(commit=False)
+            transaction.user = request.user
             transaction.save()
             messages.success(request, 'Transaction "{}" was successfully created'
                                       .format(transaction.description))
             return redirect("finance:transaction_list")
     else:
-        form = TransactionForm()
-    categories = Category.objects.all()
+        form = TransactionForm(user=request.user)
     return render(request, 'finance/transaction/create_update.html', {'form': form,
-                                                                      'categories': categories,
                                                                       'choices': Transaction.CHOICES})
 
 
 @login_required
 def transaction_delete(request, pk):
-    transaction = get_object_or_404(Transaction, pk=pk)
+    transaction = get_object_or_404(Transaction, user=request.user, pk=pk)
     transaction.delete()
     messages.success(request, 'Transaction "{}" was successfully deleted'
                      .format(transaction.description))
@@ -49,9 +50,9 @@ def transaction_delete(request, pk):
 
 @login_required
 def transaction_update(request, pk):
-    transaction = get_object_or_404(Transaction, pk=pk)
+    transaction = get_object_or_404(Transaction, user=request.user, pk=pk)
     if request.method == 'POST':
-        form = TransactionForm(request.POST, instance=transaction)
+        form = TransactionForm(request.POST, user=request.user, instance=transaction)
         if form.is_valid():
             current_transaction = form.save(commit=False)
             current_transaction.save()
@@ -64,7 +65,7 @@ def transaction_update(request, pk):
                 'total': transaction.total,
                 'date': transaction.date,
                 'description': transaction.description}
-        form = TransactionForm(initial=data)
+        form = TransactionForm(user=request.user, initial=data)
     update = True
     return render(request, "finance/transaction/create_update.html", {
         'update': update,

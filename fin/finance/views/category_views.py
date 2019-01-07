@@ -12,7 +12,10 @@ CATEGORIES_SHOW = 10
 class CategoryList(ListView):
     template_name = 'finance/category/list.html'
     context_object_name = 'categories'
-    queryset = Category.objects.order_by('-created')[:CATEGORIES_SHOW]
+
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user) \
+                               .order_by('-created')[:CATEGORIES_SHOW]
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -33,7 +36,7 @@ def category_create(request):
             description = request.POST.get('description')
         except KeyError:
             raise Http404
-        category = Category(name=name, description=description)
+        category = Category(user=request.user, name=name, description=description)
         category.save()
         messages.success(request, 'Category "{}" was successfully created'
                          .format(category.name))
@@ -43,7 +46,7 @@ def category_create(request):
 
 @login_required
 def category_delete(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+    category = get_object_or_404(Category, user=request.user, pk=pk)
     category.delete()
     messages.success(request, 'Category "{}" was successfully deleted'
                      .format(category.name))
@@ -52,7 +55,7 @@ def category_delete(request, pk):
 
 @login_required
 def category_update(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+    category = get_object_or_404(Category, user=request.user, pk=pk)
     if request.method == 'POST':
         name = request.POST.get('name', "")
         description = request.POST.get('description', "")

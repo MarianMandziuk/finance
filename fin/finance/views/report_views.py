@@ -15,19 +15,24 @@ def report(request):
         form = ReportForm(request.POST)
         if form.is_valid():
             if 'pie' in request.POST:
-                return render(request, 'finance/report/report_pie.html', generate_pie_data(form))
+                return render(request,
+                              'finance/report/report_pie.html',
+                              generate_pie_data(form, request))
             elif 'line' in request.POST:
-                return render(request, 'finance/report/report_line.html', generate_line_data(form))
+                return render(request,
+                              'finance/report/report_line.html',
+                              generate_line_data(form, request))
     else:
         form = ReportForm()
     return render(request, 'finance/report/report.html', {'form': form})
 
 
-def generate_pie_data(form):
+def generate_pie_data(form, request):
     form_fields = form.cleaned_data
-    transactions = Transaction.objects.filter(date__range=(form_fields['start_date'], form_fields['end_date']))\
+    transactions = Transaction.objects.filter(user=request.user,
+                                              date__range=(form_fields['start_date'], form_fields['end_date']))\
                                       .filter(type_operation=form_fields['type_operation'])
-    categories = Category.objects.all()
+    categories = Category.objects.filter(user=request.user).all()
     data_for_line = []
     for category in categories:
         total_sum = 0
@@ -44,9 +49,10 @@ def generate_pie_data(form):
     return context
 
 
-def generate_line_data(form):
+def generate_line_data(form, request):
     form_fields = form.cleaned_data
-    transactions = Transaction.objects.filter(date__range=(form_fields['start_date'], form_fields['end_date'])) \
+    transactions = Transaction.objects.filter(user=request.user,
+                                              date__range=(form_fields['start_date'], form_fields['end_date'])) \
                                       .filter(type_operation=form_fields['type_operation'])
     data_for_line = []
     sum_by_dates = transactions.values('date').annotate(data_sum=Sum('total'))

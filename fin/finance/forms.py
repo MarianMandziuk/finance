@@ -1,5 +1,5 @@
 from django import forms
-from .models import Transaction
+from .models import Transaction, Category
 from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.models import User
 
@@ -11,6 +11,11 @@ class TransactionForm(forms.ModelForm):
         widgets = {
             'date': DatePickerInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(TransactionForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.filter(user=user)
 
 
 class ReportForm(forms.Form):
